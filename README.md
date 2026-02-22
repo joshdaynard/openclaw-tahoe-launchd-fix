@@ -15,9 +15,19 @@ this workaround should fix it.
 
 ## Why this happens
 
-On some Tahoe beta setups (especially with home directories under `/Volumes/...`), launchd may reject user LaunchAgent plists at those paths even when file perms look correct.
+This tends to affect people who moved their macOS home directory onto an external drive.
 
-The same plist usually works if loaded from a more trusted local path.
+In that setup, your account path becomes something like:
+
+- `/Volumes/<DriveName>/<username>`
+
+instead of the default:
+
+- `/Users/<username>`
+
+On some Tahoe beta systems, launchd may reject LaunchAgent plists under `/Volumes/...` with a misleading ownership/permissions error, even when the plist itself looks fine.
+
+The same plist usually works when placed on a launchd-trusted local path (for example `/Library/LaunchAgents`).
 
 ---
 
