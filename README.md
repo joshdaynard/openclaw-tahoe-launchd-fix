@@ -33,13 +33,11 @@ The same plist usually works when placed on a launchd-trusted local path (for ex
 
 ## Quick fix script
 
-Use this one-shot script:
+From the root of this repo, run this one-shot script:
 
 ```bash
-~/\.openclaw/workspace/scripts/fix-openclaw-launchagent-tahoe.sh
+./scripts/fix-openclaw-launchagent-tahoe.sh
 ```
-
-(Or full path: `/Volumes/eHome/joshd/.openclaw/workspace/scripts/fix-openclaw-launchagent-tahoe.sh`)
 
 ### What it does
 
