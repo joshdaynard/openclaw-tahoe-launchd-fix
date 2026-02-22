@@ -80,6 +80,31 @@ openclaw status
 
 ---
 
+## Common error patterns
+
+### 1) `Bootstrap failed: 125: Domain does not support specified action`
+
+Usually means launchctl is being invoked from the wrong context/domain.
+
+Most common causes:
+- running from a non-GUI shell/session
+- trying to load a LaunchAgent into `system` domain
+- mixing sudo with the wrong launchctl domain target
+
+Fix:
+- run from a logged-in desktop Terminal session
+- target `gui/$(id -u)` for LaunchAgent bootstrap
+- use sudo for `/Library/LaunchAgents` file writes only (`cp/chown/chmod`)
+
+### 2) `Bootstrap failed: 5: Input/output error`
+
+On affected Tahoe + external-home setups, this is often a generic wrapper over:
+- `Path had bad ownership/permissions`
+- when plist path is under `/Volumes/...`
+
+Fix:
+- use this repo script to stage plist under `/Library/LaunchAgents` and bootstrap in `gui/$UID`
+
 ## Troubleshooting
 
 Check launchd logs for the true reason:

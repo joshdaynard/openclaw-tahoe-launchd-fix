@@ -32,6 +32,14 @@ require_cmd launchctl
 require_cmd openclaw
 require_cmd sudo
 
+log "Preflight: verify GUI launchd domain exists (gui/${USER_UID})"
+if ! launchctl print "gui/${USER_UID}" >/dev/null 2>&1; then
+  echo "Error: gui/${USER_UID} domain is unavailable from this shell." >&2
+  echo "This usually causes: Bootstrap failed: 125 (Domain does not support specified action)." >&2
+  echo "Run this from an interactive Terminal in the logged-in desktop session (not headless SSH)." >&2
+  exit 1
+fi
+
 log "Checking for user plist: ${USER_PLIST}"
 if [[ ! -f "${USER_PLIST}" ]]; then
   warn "User plist not found. Attempting to generate it via: openclaw gateway install"
