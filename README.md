@@ -1,10 +1,11 @@
 # OpenClaw Gateway LaunchAgent Workaround (macOS Tahoe 26.x beta)
 
-If `openclaw gateway install` fails with:
+If `openclaw gateway install` fails with either:
 
+- `Bootstrap failed: 125: Domain does not support specified action`
 - `Bootstrap failed: 5: Input/output error`
 
-…and launchd logs show:
+…and/or launchd logs show:
 
 - `Path had bad ownership/permissions`
 - plist path under `/Volumes/.../Library/LaunchAgents/...`
