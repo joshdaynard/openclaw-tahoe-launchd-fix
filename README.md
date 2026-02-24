@@ -45,9 +45,10 @@ From the root of this repo, run this one-shot script:
 1. Locates/creates `~/Library/LaunchAgents/ai.openclaw.gateway.plist`
 2. Copies plist to `/Library/LaunchAgents/ai.openclaw.gateway.plist`
 3. Sets ownership/permissions to `root:wheel` + `0644`
-4. Bootstraps into your user GUI domain: `gui/$UID`
-5. Enables + kickstarts service
-6. Verifies with `launchctl print` and `openclaw status`
+4. Boots out stale/duplicate jobs (by label and both plist paths)
+5. Bootstraps into your user GUI domain: `gui/$UID` (idempotent-safe)
+6. Enables + kickstarts service
+7. Verifies with `launchctl print` and `openclaw status`
 
 ---
 

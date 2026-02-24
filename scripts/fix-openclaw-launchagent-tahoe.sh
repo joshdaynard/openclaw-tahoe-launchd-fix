@@ -67,13 +67,30 @@ sudo chown root:wheel "${GLOBAL_PLIST}"
 sudo chmod 644 "${GLOBAL_PLIST}"
 
 log "Bootout any existing job in gui/${USER_UID} (safe if absent)"
+# Try all likely forms so updates/reinstalls don't get stuck in a half-loaded state.
+launchctl bootout "gui/${USER_UID}/${LABEL}" >/dev/null 2>&1 || true
 launchctl bootout "gui/${USER_UID}" "${GLOBAL_PLIST}" >/dev/null 2>&1 || true
+launchctl bootout "gui/${USER_UID}" "${USER_PLIST}" >/dev/null 2>&1 || true
 
 log "Bootstrap service into gui/${USER_UID}"
-launchctl bootstrap "gui/${USER_UID}" "${GLOBAL_PLIST}"
+set +e
+BOOTSTRAP_OUT="$(launchctl bootstrap "gui/${USER_UID}" "${GLOBAL_PLIST}" 2>&1)"
+BOOTSTRAP_RC=$?
+set -e
+if [[ ${BOOTSTRAP_RC} -ne 0 ]]; then
+  # If job is already loaded, treat as recoverable and continue.
+  if launchctl print "gui/${USER_UID}/${LABEL}" >/dev/null 2>&1; then
+    warn "bootstrap returned non-zero but service is already loaded; continuing."
+    warn "bootstrap output: ${BOOTSTRAP_OUT}"
+  else
+    echo "launchctl bootstrap failed and service is not loaded." >&2
+    echo "Output: ${BOOTSTRAP_OUT}" >&2
+    exit 1
+  fi
+fi
 
 log "Enable + kickstart"
-launchctl enable "gui/${USER_UID}/${LABEL}"
+launchctl enable "gui/${USER_UID}/${LABEL}" >/dev/null 2>&1 || true
 launchctl kickstart -k "gui/${USER_UID}/${LABEL}"
 
 log "Verification: launchctl print"
