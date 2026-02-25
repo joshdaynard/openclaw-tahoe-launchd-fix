@@ -40,6 +40,21 @@ From the root of this repo, run this one-shot script:
 ./scripts/fix-openclaw-launchagent-tahoe.sh
 ```
 
+## Post-update quick checklist (30–60 seconds)
+
+After any `openclaw update` on affected Tahoe/external-home setups:
+
+```bash
+openclaw update
+./scripts/fix-openclaw-launchagent-tahoe.sh
+openclaw status
+```
+
+Expected result:
+- Gateway service shows installed/loaded/running
+- No repeated `pairing required` reconnect spam in normal operation
+- Cron jobs continue to deliver normally
+
 ### What it does
 
 1. Locates/creates `~/Library/LaunchAgents/ai.openclaw.gateway.plist`
